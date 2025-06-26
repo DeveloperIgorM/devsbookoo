@@ -1,4 +1,5 @@
 <?php 
+require_once 'dao/UserDaoMysql.php';
 
 class Auth {
 
@@ -12,8 +13,16 @@ class Auth {
  
 
   public function checkToken() {
+    // SE token não estiver vazio
       if(!empty($_SESSION['token'])) {
         $token = $_SESSION['token'];
+
+        $userDao = new UserDaoMysql($this->pdo);
+        $user = $userDao->findByToken($token);
+
+        if($user) {
+          return $user;
+        }
 
       }
 
